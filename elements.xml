@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<data>
+  <Version value="0.1"/>
+  <Category name='Show' value='0' help="Displays information about the system">
+    <Element name='system' value='0'>
+      <Help>
+        <![CDATA[some help text]]>
+      </Help>
+    </Element>
+  </Category>
+  <Category name='Set' value='6' help="Provides set functionality">
+    <Element name='system' value='0'>
+      <Help>
+        <![CDATA[some help text]]>
+      </Help>
+    </Element>
+  </Category></data>
