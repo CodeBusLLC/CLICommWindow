@@ -32,3 +32,22 @@ Categories:
       - name: 'system'
         value: '0'
         Help: set help text
+    Group:
+      - name: R1
+        Elements:
+          - name: 'rpm1'
+            value: '0'
+            Help: R1 rpm1 help text
+          - name: 'rpm2'
+            value: '0'
+            Help: R1 rpm2 help text
+      - name: R2
+        Elements:
+          - name: 'rpm1'
+            value: '0'
+            Help: R2 rpm1 help text
+          - name: 'rpm2'
+            value: '0'
+            Help: R2 rpm2 help text
+            
+        

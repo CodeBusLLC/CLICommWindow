@@ -19,7 +19,8 @@ class CLICommWindow_Treeview(Frame):
     s.configure("Treeview.Heading", font=("Calibri",12,'bold'), background='light gray')
     s.configure("Treeview", background="ivory", fieldbackground="ivory", foreground="black")
 
-    columns_=( "Category", "Member", "Element", "Help")
+    columns_=( "Category", "Group", "Element", "Help")
+    colWidth_=( 100, 120, 160, 350 )
     tv = ttk.Treeview( self, columns=columns_, show='tree headings', 
                        height=10, selectmode="browse"
                      )
@@ -27,19 +28,14 @@ class CLICommWindow_Treeview(Frame):
     tv.pack(side=LEFT, fill=X, expand=True)
 
     tv.heading("#0", text='')
-    tv.column("#0", minwidth=20, width=30, stretch=NO)
+    tv.column("#0", minwidth=20, width=20, stretch=NO)
 
-    tv.column(columns_[0], width=100, stretch=NO)
-    tv.heading(columns_[0], text=columns_[0])
-    
-    tv.column(columns_[1], width=150, stretch=NO)
-    tv.heading(columns_[1], text=columns_[1])
-
-    tv.column(columns_[2], width=150, stretch=NO)
-    tv.heading(columns_[2], text=columns_[2])
-
-    tv.column(columns_[3], width=350, stretch=NO)
-    tv.heading(columns_[3], text=columns_[3])
+    stretch_ = NO
+    for col_ in range(0, len(columns_)):
+      if col_ == 3:
+        stretch_ = YES
+      tv.column(columns_[col_], width=colWidth_[col_], stretch=stretch_)
+      tv.heading(columns_[col_], text=columns_[col_])
     
     tv.bind("<Button-3>", self.doPopup)
     self.createPopupMenu()
@@ -67,14 +63,28 @@ class CLICommWindow_Treeview(Frame):
       print(ydata_['Version'])
       for category_ in ydata_['Categories']:
         #print(category_['name'])
-        parent_ = tv.insert('', "end", text="", values=(category_['name'], "", category_['help']), open=True)
+        categoryValue_ = category_['value']
+        parent_ = tv.insert('', "end", text="", values=(category_['name'], "", "", category_['help']), open=True)
         for element_ in category_['Elements']:
           #print(element_)
           #print( "%s %s" % (element_['name'], element_['value']) )
           help_ = ''
           if 'Help' in element_:
             help_ = element_['Help']
-          tv.insert(parent_, "end", text="%s %s" % (category_['value'], element_['value']), values=("", "", element_['name'], help_), open=True)
+          tv.insert(parent_, "end", text="%s %s" % (categoryValue_, element_['value']), values=("", "", element_['name'], help_), open=True)
+        if 'Group' in category_:
+          for group_ in category_['Group']:
+            help_ = ''
+            if 'Help' in group_:
+              help_ = group_['Help']
+            parent1_ = tv.insert(parent_, "end", text="", values=("", group_['name'], "", help_), open=True)
+            for element_ in group_['Elements']:
+              #print(element_)
+            #print( "%s %s" % (element_['name'], element_['value']) )
+              help_ = ''
+              if 'Help' in element_:
+                help_ = element_['Help']
+              tv.insert(parent1_, "end", text="%s %s" % (categoryValue_, element_['value']), values=("", "", element_['name'], help_), open=True)
 
   def loadTreeXML(self):
     tv = self.tv  
