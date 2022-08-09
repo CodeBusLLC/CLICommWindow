@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import ttk
 import xml.etree.ElementTree as ET
+import yaml
 import CLICommWindow_Reader
 import CLICommWindow_Editbar
 
@@ -10,19 +11,20 @@ class CLICommWindow_Treeview(Frame):
     CLICommWindow_Treeview.inst = self
     self.owner = aOwner
     Frame.__init__(self,aOwner.windowGet())
+    self.keyItem = None
+    self.searchItem = None
     tv = ttk.Treeview( self, columns=( "Category", "Element", "Help"), show='tree headings', 
-                       height=5, selectmode="browse"
+                       height=10, selectmode="browse"
                      )
     self.tv = tv
     tv.pack(side=LEFT, fill=X, expand=True)
-    self.pack(side=TOP, fill=X)
 
     tv.heading("#0", text='')
     tv.column("#0", minwidth=20, width=30, stretch=NO)
     tv.heading("Category", text='Category')
     tv.column("Category", width=100, stretch=NO)
     tv.heading("Element", text='Element')
-    tv.column("Element", width=100, stretch=NO)
+    tv.column("Element", width=150, stretch=NO)
     tv.heading("Help", text='Help')
     tv.column("Help", width=350, stretch=NO)
     
@@ -30,10 +32,38 @@ class CLICommWindow_Treeview(Frame):
     self.createPopupMenu()
     
     tv.bind("<Double-1>", self.OnDoubleClick)
+    tv.bind("<Key>", self.OnKey)
+    
+    sb_ = Scrollbar(self)
+    tv.config(yscrollcommand=sb_.set)
+    sb_.config(command=tv.yview)
+    sb_.pack(side=RIGHT, fill=BOTH)
+
+    self.pack(side=TOP, fill=X)
     
     #c = tv.insert('', "end", text="0", values=("Show" ), open=True)
     #tv.insert(c, "end", text="0", values=("", "System"))
-    
+    self.loadTreeYaml()
+
+  def loadTreeYaml(self):
+    tv = self.tv  
+    with open('elements.yaml', 'r') as file:
+      ydata_ = yaml.full_load(file)
+      #print(ydata_)
+      print(ydata_['Version'])
+      for category_ in ydata_['Categories']:
+        #print(category_['name'])
+        parent_ = tv.insert('', "end", text="", values=(category_['name'], "", category_['help']), open=True)
+        for element_ in category_['Elements']:
+          #print(element_)
+          #print( "%s %s" % (element_['name'], element_['value']) )
+          help_ = ''
+          if 'Help' in element_:
+            help_ = element_['Help']
+          tv.insert(parent_, "end", text="%s %s" % (category_['value'], element_['value']), values=("", element_['name'], help_), open=True)
+
+  def loadTreeXML(self):
+    tv = self.tv  
     dataTree_ = ET.parse('elements.xml')
     root_ = dataTree_.getroot()
     for child_ in root_:
@@ -78,6 +108,26 @@ class CLICommWindow_Treeview(Frame):
     #print("you clicked on", self.tv.item(item,"text"))
     CLICommWindow_Editbar.CLICommWindow_Editbar.set( self.tv.item(item,"text") )
 
+  def OnKey(self, aEvent):
+    if aEvent.char != '':
+      found_ = False
+      children_ = self.tv.get_children();
+      if self.keyItem != None:
+        index_ = self.keyItem + 1
+      else:
+        index_ = 0
+      for i_ in range( index_, len(children_)):
+        child_ = children_[i_]
+        item_ = self.tv.item(child_)
+        if aEvent.char in item_['values'][0]:
+          self.tv.focus(child_)
+          self.tv.selection_set((child_))
+          self.keyItem = i_
+          found_ = True
+          break 
+      if not found_:
+        self.keyItem = None      
+
   def collapse():
     tv_ = CLICommWindow_Treeview.inst.tv
     for i_ in tv_.get_children():
@@ -90,3 +140,32 @@ class CLICommWindow_Treeview(Frame):
       if tv_.parent(i_) == '':
         tv_.item(i_, open=True)
   
+  def _searchChildren(self, aIndex, aItem, aString):
+    found_ = False
+    children_ = self.tv.get_children(aItem);
+    for i_ in range( aIndex, len(children_)):
+      child_ = children_[i_]
+      item_ = self.tv.item(child_)
+      if aString in item_['values']:
+        self.tv.focus(child_)
+        self.tv.selection_set((child_))
+        self.searchItem = i_
+        return True
+      found_ = self._searchChildren(0, child_, aString)
+      if found_:
+        break
+    return found_
+        
+  def doSearch(aString):
+    print("srch tree")
+    found_ = False
+    self_ = CLICommWindow_Treeview.inst
+    tv_ = CLICommWindow_Treeview.inst.tv
+    if self_.searchItem != None:
+      index_ = self_.searchItem + 1
+    else:
+      index_ = 0
+    found_ = CLICommWindow_Treeview._searchChildren(self_, index_, None, aString)
+    if not found_:
+      self_.searchItem = None      
+    

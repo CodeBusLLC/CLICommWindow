@@ -3,6 +3,8 @@ from tkinter import ttk
 import CLICommWindow_Reader
 import CLICommWindow_Connect
 import CLICommWindow_Treeview
+import CLICommWindow_RecvdText
+import CLICommWindow_Search
 
 class CLICommWindow_Menu:
   def __init__(self, aOwner):
@@ -22,6 +24,11 @@ class CLICommWindow_Menu:
     viewmenu.add_command(label="Expand", command=self.doExpand)
     menubar.add_cascade(label="View", menu=viewmenu)
     
+    searchmenu = Menu(menubar, tearoff=0)
+    searchmenu.add_command(label="Tree", command=self.doSearchTree)
+    searchmenu.add_command(label="Received Text", command=self.doSearchRecvd)
+    menubar.add_cascade(label="Search", menu=searchmenu)
+
     aOwner.windowGet().config(menu=menubar)
     
   def doConnect(self):
@@ -40,3 +47,12 @@ class CLICommWindow_Menu:
     
   def doExpand(self):
     CLICommWindow_Treeview.CLICommWindow_Treeview.expand()
+
+  def doSearchTree(self):
+    dlgSearch_ = CLICommWindow_Search.CLICommWindow_Search(self, CLICommWindow_Treeview.CLICommWindow_Treeview)
+    pass
+    
+  def doSearchRecvd(self):
+    dlgSearch_ = CLICommWindow_Search.CLICommWindow_Search(self, CLICommWindow_RecvdText.CLICommWindow_RecvdText)
+    pass
+ 
