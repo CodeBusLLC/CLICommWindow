@@ -34,9 +34,9 @@ class CLICommWindow_Connect(Toplevel):
       self.destroy()
       
   def doPortSelected(self):
-    print(self.cbPorts.get())
+    #print(self.cbPorts.get())
     self.portSelected = self.cbPorts.get().split('(')[0]
-    print(self.portSelected)
+    #print(self.portSelected)
     self.doClose()
   
   def portSelectedGet(self):

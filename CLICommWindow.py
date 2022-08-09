@@ -23,7 +23,7 @@ class Application(Tk):
 class GUI():
   def __init__(self, aWindow):
     self.window = aWindow
-    m = CLICommWindow_Menu.CLICommWindow_Menu(self)
+    self.menu = CLICommWindow_Menu.CLICommWindow_Menu(self)
     self.tree = CLICommWindow_Treeview.CLICommWindow_Treeview(self)
     self.editbar = CLICommWindow_Editbar.CLICommWindow_Editbar(self)
     self.recvdText = CLICommWindow_RecvdText.CLICommWindow_RecvdText(self)
@@ -38,7 +38,15 @@ class GUI():
   def doClose(self):
     self.reader.stop()
     self.window.destroy()
-        
+
+  def connected(self, aConnected, aPort):
+    if aConnected:
+      self.window.title("%s - %s" % (self.titleGet(), aPort))
+    else:
+      self.window.title(self.titleGet())
+    self.editbar.enable(aConnected)
+    self.menu.connected(aConnected)
+    
   def processText(self, aLine):
     self.recvdText.append(aLine)
 

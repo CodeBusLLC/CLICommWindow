@@ -10,12 +10,20 @@ class CLICommWindow_Reader(threading.Thread):
     super(CLICommWindow_Reader,self).__init__()
     CLICommWindow_Reader.inst = self
     self.owner = aOwner
-    self.ser = None
+    self.port = None
+    self.disconnectRequest = False
+    self.ser = serial.Serial()
+    self.ser.baudrate = 115200
+    self.ser.timeout = .1
     self.toSend = None
     self.start()
     
   def run(self):
     while CLICommWindow_Reader.doRun:
+      if self.disconnectRequest:
+        self.ser.close()
+        self.disconnectRequest = False
+        
       if self.ser and self.ser.is_open:
         if self.toSend:
           self.ser.write( self.toSend.encode(encoding='utf-8') )
@@ -34,9 +42,21 @@ class CLICommWindow_Reader(threading.Thread):
     CLICommWindow_Reader.doRun = False
   
   def openConnection(self, aPort):
-    self.ser = serial.Serial(aPort, 115200, timeout=.1)
-    print(self.ser.is_open)
-    self.ser.write(b'hello')
+    self.ser.port = aPort
+    self.ser.open()
+    if self.ser.is_open:
+      self.port = aPort
+      self.owner.connected(True, self.port)
+  
+  def disconnect(self):
+    self.disconnectRequest = True
+    self.owner.connected(False, self.port)
+
+  def reconnect(self):
+    self.ser.open()
+    if self.ser.is_open:
+      self.owner.connected(True, self.port)
     
   def send(self, aString):
     self.toSend = aString
+    
