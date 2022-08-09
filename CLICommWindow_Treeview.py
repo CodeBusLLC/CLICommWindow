@@ -13,6 +13,15 @@ class CLICommWindow_Treeview(Frame):
     Frame.__init__(self,aOwner.windowGet())
     self.keyItem = None
     self.searchItem = None
+    pressed_color = 'black'
+    highlight_color='red'
+
+    s = ttk.Style()
+    s.theme_use('clam')
+    s.configure("Treeview.Heading", font=("Calibri",12,'bold'), background='light gray')
+
+    s.configure("Treeview", background="ivory", fieldbackground="ivory", foreground="black")
+
     tv = ttk.Treeview( self, columns=( "Category", "Element", "Help"), show='tree headings', 
                        height=10, selectmode="browse"
                      )
@@ -21,8 +30,9 @@ class CLICommWindow_Treeview(Frame):
 
     tv.heading("#0", text='')
     tv.column("#0", minwidth=20, width=30, stretch=NO)
-    tv.heading("Category", text='Category')
     tv.column("Category", width=100, stretch=NO)
+    tv.heading("Category", text='Category')
+    
     tv.heading("Element", text='Element')
     tv.column("Element", width=150, stretch=NO)
     tv.heading("Help", text='Help')
