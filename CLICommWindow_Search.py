@@ -7,7 +7,7 @@ class CLICommWindow_Search(Toplevel):
     super().__init__()
     self.target = aTarget
     self.portSelected = None
-    self.title("Search")
+    self.title("Search: " + aTarget.nameGet())
     self.owner = aOwner
     fr = Frame(self)
     l = Label(fr, text="Please enter the string to search for")

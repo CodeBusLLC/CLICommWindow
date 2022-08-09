@@ -23,6 +23,7 @@ class CLICommWindow_Connect(Toplevel):
     self.btnOk = Button(fr, text="Connect", command=self.doPortSelected)
     self.btnOk.pack()
     fr.pack()
+    self.cbPorts.focus_set()
        
     self.protocol("WM_DELETE_WINDOW", self.doClose)
     self.owner.windowGet().wm_attributes("-disabled", True)

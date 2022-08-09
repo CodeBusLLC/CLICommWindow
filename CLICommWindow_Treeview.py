@@ -45,6 +45,9 @@ class CLICommWindow_Treeview(Frame):
     #tv.insert(c, "end", text="0", values=("", "System"))
     self.loadTreeYaml()
 
+  def nameGet():
+    return 'Element Tree'
+    
   def loadTreeYaml(self):
     tv = self.tv  
     with open('elements.yaml', 'r') as file:

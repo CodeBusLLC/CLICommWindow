@@ -29,3 +29,6 @@ class CLICommWindow_Editbar(Frame):
   def set(aString):
     CLICommWindow_Editbar.inst.entry.set(aString)
     
+  def append(aString):
+    CLICommWindow_Editbar.inst.entry.set(CLICommWindow_Editbar.inst.entry.get() + aString)
+    

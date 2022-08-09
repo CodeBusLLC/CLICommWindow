@@ -29,16 +29,16 @@ class GUI():
     self.recvdText = CLICommWindow_RecvdText.CLICommWindow_RecvdText(self)
     self.reader = CLICommWindow_Reader.CLICommWindow_Reader(self)
 
+  def donothing():
+      pass
+
   def windowGet(self):
     return self.window
     
   def doClose(self):
     self.reader.stop()
     self.window.destroy()
-      
-  def donothing():
-      pass
-  
+        
   def processText(self, aLine):
     self.recvdText.append(aLine)
 

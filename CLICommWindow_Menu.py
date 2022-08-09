@@ -13,10 +13,9 @@ class CLICommWindow_Menu:
     filemenu = Menu(menubar, tearoff=0)
     filemenu.add_command(label="Connect", command=self.doConnect)
     filemenu.add_command(label="Disconnect", command=self.doDisconnect)
-    filemenu.add_command(label="Reconnect", command=aOwner.donothing)
-    filemenu.add_command(label="Save as...", command=aOwner.donothing)
+    filemenu.add_command(label="Reconnect", command=self.doReconnect)
     filemenu.add_separator()
-    filemenu.add_command(label="Exit", command=aOwner.donothing)
+    filemenu.add_command(label="Exit", command=self.owner.doClose)
     menubar.add_cascade(label="File", menu=filemenu)
     
     viewmenu = Menu(menubar, tearoff=0)
@@ -25,12 +24,12 @@ class CLICommWindow_Menu:
     menubar.add_cascade(label="View", menu=viewmenu)
     
     searchmenu = Menu(menubar, tearoff=0)
-    searchmenu.add_command(label="Tree", command=self.doSearchTree)
+    searchmenu.add_command(label="Element Tree", command=self.doSearchTree)
     searchmenu.add_command(label="Received Text", command=self.doSearchRecvd)
     menubar.add_cascade(label="Search", menu=searchmenu)
 
     aOwner.windowGet().config(menu=menubar)
-    
+        
   def doConnect(self):
     cd = CLICommWindow_Connect.CLICommWindow_Connect(self.owner)
     port_ = cd.portSelectedGet()
@@ -40,6 +39,9 @@ class CLICommWindow_Menu:
       self.owner.windowGet().title("%s - %s" % (self.owner.titleGet(), port_))
 
   def doDisconnect(self):
+    pass
+  
+  def doReconnect(self):
     pass
     
   def doCollapse(self):
