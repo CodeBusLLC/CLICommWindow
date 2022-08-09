@@ -1,0 +1,25 @@
+{
+ "Version": "0.1",
+ "Categories": [
+  { "name": "Show",
+    "value": '0',
+    "help": "Displays information about the system",
+    "Elements": [
+      { "name": 'system',
+        "value": '0',
+        "Help": "show help text"
+      },
+      ],
+  },
+  { "name": "Set",
+    "value": '6',
+    "help": "Sets parameters in the system",
+    "Elements": [
+      { "name": 'system',
+        "value": '0',
+        "Help": "set help text"
+      },
+      ],
+  },
+  ]
+}

@@ -1,0 +1,34 @@
+Version: "0.1"
+Categories:
+  - name: "Show" 
+    value: '0'
+    help: Displays information about the system
+    Elements:
+      - name: 'system'
+        value: '0'
+        Help: Show System parameters
+      - name: 'Mixing motor (motor 1)'
+        value: '1'
+        Help: Show Mixing Motor statistics in realtime
+      - name: 'Temperatures'
+        value: '2'
+        Help: Show system temperatures in realtime
+      - name: 'ADC'
+        value: '3'
+        Help: Show ADC channels 8-15 in realtime
+      - name: 'User Interface'
+        value: '4'
+        Help: Show button state, LID state, etc
+      - name: 'Making statistics'
+        value: '5'
+        Help: Show Making statistics w/ itentifier
+      - name: 'Making statistics only'
+        value: '6'
+        Help: Show Making statistics w/o identifiers
+  - name: "Set" 
+    value: '6'
+    help: Sets parameters in the system
+    Elements:
+      - name: 'system'
+        value: '0'
+        Help: set help text
