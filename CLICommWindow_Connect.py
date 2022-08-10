@@ -11,7 +11,7 @@ class CLICommWindow_Connect(Toplevel):
     self.owner = aOwner
     fr = Frame(self)
     l = Label(fr, text="Please select a port and click Connect")
-    l.pack()
+    l.pack(pady=10)
     # Combobox creation
     self.cbPorts = ttk.Combobox(fr, width = 50)
     portlist = comports()
@@ -21,7 +21,7 @@ class CLICommWindow_Connect(Toplevel):
     self.cbPorts['values'] = plist
     self.cbPorts.pack()
     self.btnOk = Button(fr, text="Connect", command=self.doPortSelected)
-    self.btnOk.pack()
+    self.btnOk.pack(pady=10)
     fr.pack()
     self.cbPorts.focus_set()
        

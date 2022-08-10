@@ -10,14 +10,14 @@ class CLICommWindow_Search(Toplevel):
     self.title("Search: " + aTarget.nameGet())
     self.owner = aOwner
     fr = Frame(self)
-    l = Label(fr, text="Please enter the string to search for")
-    l.pack()
+    l = Label(fr, text="Please enter the string to search for and press Search")
+    l.pack(pady=10)
     # Combobox creation
     self.cbSearch = ttk.Combobox(fr, width = 50)
     self.cbSearch['values'] = CLICommWindow_Search.history
     self.cbSearch.pack()
     self.btnOk = Button(fr, text="Search", command=self.doSearch)
-    self.btnOk.pack()
+    self.btnOk.pack(pady=10)
     fr.pack()
        
   def doSearch(self):

@@ -10,8 +10,8 @@ class CLICommWindow_Editbar(Frame):
     self.history = []
     self.entry = ttk.Combobox(self, state=DISABLED)
     self.btnEnter = Button(self, text="Send", command=self.doSend, state=DISABLED)
-    self.entry.pack(side=RIGHT, fill=X, expand=True)
-    self.btnEnter.pack(side=LEFT)
+    self.btnEnter.pack(side=LEFT, padx=4)
+    self.entry.pack(side=RIGHT, padx=4, fill=X, expand=True)
     self.pack(side=TOP, fill=X)
   
   def enable(self, aEnable):
