@@ -52,5 +52,8 @@ class GUI():
 
   def titleGet(self):
     return Application.strTitle
+  
+  def reloadFile(self):
+    CLICommWindow_Treeview.CLICommWindow_Treeview.reload()
     
 app = Application()

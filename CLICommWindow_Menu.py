@@ -15,6 +15,8 @@ class CLICommWindow_Menu:
     self.filemenu.add_command(label="Disconnect", command=self.doDisconnect, state=DISABLED)
     self.filemenu.add_command(label="Reconnect", command=self.doReconnect, state=DISABLED)
     self.filemenu.add_separator()
+    self.filemenu.add_command(label="Reload Elements", command=self.owner.reloadFile)
+    self.filemenu.add_separator()
     self.filemenu.add_command(label="Exit", command=self.owner.doClose)
     menubar.add_cascade(label="File", menu=self.filemenu)
     

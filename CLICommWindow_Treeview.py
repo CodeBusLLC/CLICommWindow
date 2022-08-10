@@ -107,6 +107,12 @@ class CLICommWindow_Treeview(Frame):
             help_ = help_.text.strip()
           tv.insert(parent_, "end", text="%s %s" % (child_.get('value'), subchild_.get('value')), values=("", subchild_.get('name'), help_), open=True)
   
+  def reload():
+    self_ = CLICommWindow_Treeview.inst
+    self_.tv.delete(*self_.tv.get_children())
+    self_.owner.windowGet().update()
+    self_.loadTreeYaml()
+    
   def createPopupMenu(self):
     self.popup = Menu(self.owner.windowGet(), tearoff=0)
     self.popup.add_command(label="Send", command=self.doSend)
