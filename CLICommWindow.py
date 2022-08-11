@@ -23,6 +23,7 @@ class Application(Tk):
 class GUI():
   def __init__(self, aWindow):
     self.window = aWindow
+    self.versions = []
     self.menu = CLICommWindow_Menu.CLICommWindow_Menu(self)
     self.tree = CLICommWindow_Treeview.CLICommWindow_Treeview(self)
     self.editbar = CLICommWindow_Editbar.CLICommWindow_Editbar(self)
@@ -54,6 +55,6 @@ class GUI():
     return Application.strTitle
   
   def reloadFile(self):
-    CLICommWindow_Treeview.CLICommWindow_Treeview.reload()
+    CLICommWindow_Treeview.CLICommWindow_Treeview.loadElements()
     
 app = Application()

@@ -5,6 +5,7 @@ import CLICommWindow_Connect
 import CLICommWindow_Treeview
 import CLICommWindow_RecvdText
 import CLICommWindow_Search
+import CLICommWindow_Versions
 
 class CLICommWindow_Menu:
   def __init__(self, aOwner):
@@ -29,6 +30,10 @@ class CLICommWindow_Menu:
     searchmenu.add_command(label="Element Tree", command=self.doSearchTree)
     searchmenu.add_command(label="Received Text", command=self.doSearchRecvd)
     menubar.add_cascade(label="Search", menu=searchmenu)
+
+    helpmenu = Menu(menubar, tearoff=0)
+    helpmenu.add_command(label="Versions", command=self.doVersions)
+    menubar.add_cascade(label="Help", menu=helpmenu)
 
     aOwner.windowGet().config(menu=menubar)
 
@@ -64,9 +69,10 @@ class CLICommWindow_Menu:
 
   def doSearchTree(self):
     dlgSearch_ = CLICommWindow_Search.CLICommWindow_Search(self, CLICommWindow_Treeview.CLICommWindow_Treeview)
-    pass
     
   def doSearchRecvd(self):
     dlgSearch_ = CLICommWindow_Search.CLICommWindow_Search(self, CLICommWindow_RecvdText.CLICommWindow_RecvdText)
-    pass
  
+  def doVersions(self):
+    CLICommWindow_Versions.CLICommWindow_Versions(self.owner, self.owner.versions)
+    

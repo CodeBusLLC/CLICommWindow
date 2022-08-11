@@ -50,17 +50,18 @@ class CLICommWindow_Treeview(Frame):
 
     self.pack(side=TOP, fill=X)
     
-    self.loadTreeYaml()
+    CLICommWindow_Treeview.loadElements()
 
   def nameGet():
     return 'Element Tree'
     
-  def loadTreeYaml(self):
+  def loadTreeYaml(self, aFile):
     tv = self.tv  
-    with open('elements.yaml', 'r') as file:
+    with open(aFile, 'r') as file:
       ydata_ = yaml.full_load(file)
       #print(ydata_)
       print(ydata_['Version'])
+      self.owner.versions.append( aFile + ' ' + ydata_['Version'] )
       for category_ in ydata_['Categories']:
         #print(category_['name'])
         categoryValue_ = category_['value']
@@ -107,11 +108,13 @@ class CLICommWindow_Treeview(Frame):
             help_ = help_.text.strip()
           tv.insert(parent_, "end", text="%s %s" % (child_.get('value'), subchild_.get('value')), values=("", subchild_.get('name'), help_), open=True)
   
-  def reload():
+  def loadElements():
     self_ = CLICommWindow_Treeview.inst
     self_.tv.delete(*self_.tv.get_children())
     self_.owner.windowGet().update()
-    self_.loadTreeYaml()
+    with open('elements.txt', 'r') as file_:
+      elementsFile_ = file_.readline().strip()
+      self_.loadTreeYaml(elementsFile_)
     
   def createPopupMenu(self):
     self.popup = Menu(self.owner.windowGet(), tearoff=0)
