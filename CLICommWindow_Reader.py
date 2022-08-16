@@ -32,7 +32,7 @@ class CLICommWindow_Reader(threading.Thread):
         if line_:
           lineDecoded_ = line_.decode(encoding='utf-8')
           #print(lineDecoded_)
-          self.owner.processText(line_)
+          self.owner.processText(lineDecoded_)
     if self.ser:
       self.ser.close()
       self.ser = None
