@@ -4,6 +4,7 @@ import xml.etree.ElementTree as ET
 import yaml
 import CLICommWindow_Reader
 import CLICommWindow_Editbar
+import CLICommWindow_Yaml
 
 class CLICommWindow_Treeview(Frame):
   inst = None
@@ -50,43 +51,23 @@ class CLICommWindow_Treeview(Frame):
 
     self.pack(side=TOP, fill=X)
     
-    CLICommWindow_Treeview.loadElements()
+    CLICommWindow_Yaml.LoadData_Yaml(self,'elements.yaml')
+
 
   def nameGet():
     return 'Element Tree'
-    
-  def loadTreeYaml(self, aFile):
-    tv = self.tv  
-    with open(aFile, 'r') as file:
-      ydata_ = yaml.full_load(file)
-      #print(ydata_)
-      print(ydata_['Version'])
-      self.owner.versions.append( aFile + ' ' + ydata_['Version'] )
-      for category_ in ydata_['Categories']:
-        #print(category_['name'])
-        categoryValue_ = category_['value']
-        parent_ = tv.insert('', "end", text="", values=(category_['name'], "", "", category_['help']), open=True)
-        for element_ in category_['Elements']:
-          #print(element_)
-          #print( "%s %s" % (element_['name'], element_['value']) )
-          help_ = ''
-          if 'Help' in element_:
-            help_ = element_['Help']
-          tv.insert(parent_, "end", text="%s %s" % (categoryValue_, element_['value']), values=("", "", element_['name'], help_), open=True)
-        if 'Group' in category_:
-          for group_ in category_['Group']:
-            help_ = ''
-            if 'Help' in group_:
-              help_ = group_['Help']
-            parent1_ = tv.insert(parent_, "end", text="", values=("", group_['name'], "", help_), open=True)
-            for element_ in group_['Elements']:
-              #print(element_)
-            #print( "%s %s" % (element_['name'], element_['value']) )
-              help_ = ''
-              if 'Help' in element_:
-                help_ = element_['Help']
-              tv.insert(parent1_, "end", text="%s %s" % (categoryValue_, element_['value']), values=("", "", element_['name'], help_), open=True)
 
+  def addTop(self, aValue, aColumns):
+    parent_ = self.tv.insert('', "end", text=aValue, values=aColumns, open=True)
+    return parent_
+  
+  def addGroup( self, aParent, aColumns ):
+    parent1_ = self.tv.insert(aParent, "end", text="", values=aColumns, open=True)
+    return parent1_
+    
+  def addChild( self, aParent, aValue, aColumns):
+    self.tv.insert(aParent, "end", text=aValue, values=aColumns, open=True)
+    
   def loadTreeXML(self):
     tv = self.tv  
     dataTree_ = ET.parse('elements.xml')
@@ -114,7 +95,7 @@ class CLICommWindow_Treeview(Frame):
     self_.owner.windowGet().update()
     with open('elements.txt', 'r') as file_:
       elementsFile_ = file_.readline().strip()
-      self_.loadTreeYaml(elementsFile_)
+      CLICommWindow_Yaml.LoadData_Yaml(self,elementsFile_)
     
   def createPopupMenu(self):
     self.popup = Menu(self.owner.windowGet(), tearoff=0)
@@ -129,17 +110,20 @@ class CLICommWindow_Treeview(Frame):
         self.popup.grab_release()
       
   def doSend(self):
-    text = self.tv.item(self.selection)['text']
+    #text = self.tv.item(self.selection)['text']
+    text = self.tv.item(self.selection,"text")
     parent = self.tv.parent(self.selection)
-    textParent = self.tv.item(parent)['text']
+    textParent = self.tv.item(parent,'text')
     toSend_ = "%s %s" % (textParent, text)
     #print( toSend_ )
     CLICommWindow_Reader.CLICommWindow_Reader.inst.send(toSend_)
     
   def OnDoubleClick(self, aEvent):
-    item = self.tv.selection()[0]
+    item_ = self.tv.selection()[0]
     #print("you clicked on", self.tv.item(item,"text"))
-    CLICommWindow_Editbar.CLICommWindow_Editbar.set( self.tv.item(item,"text") )
+    parent_ = self.tv.parent(item_)
+    parentText_ = self.tv.item(parent_,'text')
+    CLICommWindow_Editbar.CLICommWindow_Editbar.set( "%s %s" % (parentText_, self.tv.item(item_,"text")) )
 
   def OnKey(self, aEvent):
     if aEvent.char != '':
